@@ -1,0 +1,83 @@
+[
+  {
+    "id": "med-001",
+    "fullName": "Crocin Advance 500mg Tablet",
+    "notes": "Paracetamol-based pain & fever relief. Store in a cool, dry place away from sunlight.",
+    "expiryDate": "2025-05-28T00:00:00Z",
+    "quantity": 4,
+    "price": 32.00,
+    "brand": "GSK",
+    "createdAt": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "med-002",
+    "fullName": "Amoxicillin 500mg Capsule",
+    "notes": "Broad-spectrum antibiotic. Complete the full course even if feeling better.",
+    "expiryDate": "2026-09-10T00:00:00Z",
+    "quantity": 60,
+    "price": 78.50,
+    "brand": "Cipla",
+    "createdAt": "2024-01-10T00:00:00Z"
+  },
+  {
+    "id": "med-003",
+    "fullName": "Combiflam Tablet",
+    "notes": "Ibuprofen + Paracetamol combination. Take after food. Not for children under 12.",
+    "expiryDate": "2025-06-05T00:00:00Z",
+    "quantity": 7,
+    "price": 45.00,
+    "brand": "Sanofi",
+    "createdAt": "2024-01-15T00:00:00Z"
+  },
+  {
+    "id": "med-004",
+    "fullName": "Metformin 500mg Tablet",
+    "notes": "For Type 2 diabetes. Take with meals. Regular blood sugar monitoring recommended.",
+    "expiryDate": "2026-12-01T00:00:00Z",
+    "quantity": 120,
+    "price": 28.00,
+    "brand": "Sun Pharma",
+    "createdAt": "2024-02-01T00:00:00Z"
+  },
+  {
+    "id": "med-005",
+    "fullName": "Allegra 120mg Tablet",
+    "notes": "Fexofenadine antihistamine for seasonal allergies. Non-drowsy formula.",
+    "expiryDate": "2025-05-18T00:00:00Z",
+    "quantity": 3,
+    "price": 95.00,
+    "brand": "Sanofi",
+    "createdAt": "2024-02-10T00:00:00Z"
+  },
+  {
+    "id": "med-006",
+    "fullName": "Omez 20mg Capsule",
+    "notes": "Omeprazole for acidity and GERD. Best taken 30 minutes before breakfast.",
+    "expiryDate": "2027-03-15T00:00:00Z",
+    "quantity": 80,
+    "price": 62.00,
+    "brand": "Dr. Reddy's",
+    "createdAt": "2024-03-01T00:00:00Z"
+  },
+  {
+    "id": "med-007",
+    "fullName": "Glycomet SR 500mg",
+    "notes": "Sustained release Metformin. Do not crush or chew. Take with evening meal.",
+    "expiryDate": "2026-07-20T00:00:00Z",
+    "quantity": 9,
+    "price": 42.50,
+    "brand": "USV",
+    "createdAt": "2024-03-10T00:00:00Z"
+  },
+  {
+    "id": "med-008",
+    "fullName": "Azithromycin 500mg Tablet",
+    "notes": "Z-pack antibiotic. 3-day or 5-day course. Take on an empty stomach for best absorption.",
+    "expiryDate": "2026-05-01T00:00:00Z",
+    "quantity": 35,
+    "price": 110.00,
+    "brand": "Pfizer",
+    "createdAt": "2024-04-01T00:00:00Z"
+  }
+]
+

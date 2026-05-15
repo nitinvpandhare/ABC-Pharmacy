@@ -1,1 +1,30 @@
-node_modules
+# Node / Angular
+node_modules/
+dist/
+.angular/cache/
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results (.NET)
+bin/
+obj/
+out/
+logs/
+
+# Debug / Release
+Debug/
+Release/
+x64/
+x86/
+
+# Logs
+*.log
+
+# OS files
+Thumbs.db
+.DS_Store
