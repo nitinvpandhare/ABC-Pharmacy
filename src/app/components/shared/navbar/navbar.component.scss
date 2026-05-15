@@ -1,0 +1,9 @@
+// Navbar styles are in global styles.scss to avoid SCSS duplication
+// Component-specific overrides only here
+
+.picker-hint {
+  font-size: .88rem;
+  color: var(--text2);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}

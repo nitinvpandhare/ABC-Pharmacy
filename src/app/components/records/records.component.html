@@ -1,0 +1,48 @@
+<div class="section-header">
+  <div>
+    <h2 class="section-title">Sale Records</h2>
+    <p class="section-sub">All transactions — newest first. These records are permanent and cannot be deleted.</p>
+  </div>
+  <button class="btn btn-outline" (click)="loadRecords()">↻ Refresh</button>
+</div>
+
+<div class="table-wrap">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Medicine</th>
+        <th>Customer</th>
+        <th>Qty</th>
+        <th>Price/Unit</th>
+        <th>Total (₹)</th>
+        <th>Staff</th>
+        <th>Date &amp; Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="loading">
+        <td colspan="7" class="loading-row">Loading records…</td>
+      </tr>
+      <tr *ngIf="!loading && records.length === 0">
+        <td colspan="7">
+          <div class="empty-state">
+            <div class="empty-icon">🧾</div>
+            <p>No sale records yet. Once you make a sale, it will appear here.</p>
+          </div>
+        </td>
+      </tr>
+      <tr *ngFor="let r of records">
+        <td><strong>{{ r.medicineName }}</strong></td>
+        <td>
+          <span *ngIf="r.customerName">{{ r.customerName }}</span>
+          <span *ngIf="!r.customerName" style="color:var(--text3);font-style:italic">Walk-in</span>
+        </td>
+        <td>{{ r.quantitySold }}</td>
+        <td>₹ {{ r.pricePerUnit | number:'1.2-2' }}</td>
+        <td><strong>₹ {{ r.totalAmount | number:'1.2-2' }}</strong></td>
+        <td>{{ r.processedBy || '—' }}</td>
+        <td>{{ r.saleDate | date:'dd MMM yyyy, hh:mm a' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,74 @@
+<div class="shift-bar">
+  <span class="shift-label">👋 On shift:</span>
+  <div class="shift-staff">
+    <span class="staff-avatar-sm" [style.background]="currentStaff.color">
+      {{ currentStaff.initials }}
+    </span>
+    <span class="shift-name">{{ currentStaff.name }}</span>
+    <span class="shift-role">{{ currentStaff.role }}</span>
+  </div>
+  <button class="shift-change" (click)="openStaffPicker()">Switch ↓</button>
+</div>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-icon">⚕</span>
+      <div>
+        <span class="logo-name">ABC Pharmacy</span>
+        <span class="logo-sub">Pune, MH · Est. 2005</span>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a class="nav-btn" routerLink="/medicines" routerLinkActive="active" (click)="closeMenu()">
+        <span>💊</span> Medicines
+      </a>
+      <a class="nav-btn" routerLink="/sales" routerLinkActive="active" (click)="closeMenu()">
+        <span>🛒</span> New Sale
+      </a>
+      <a class="nav-btn" routerLink="/records" routerLinkActive="active" (click)="closeMenu()">
+        <span>🧾</span> Records
+      </a>
+      <a class="nav-btn" routerLink="/staff" routerLinkActive="active" (click)="closeMenu()">
+        <span>👥</span> Staff
+      </a>
+    </nav>
+
+    <button class="menu-toggle" (click)="toggleMobileMenu()">☰</button>
+  </div>
+
+  <div class="mobile-nav" [class.open]="mobileMenuOpen">
+    <a class="nav-btn" routerLink="/medicines" routerLinkActive="active" (click)="closeMenu()">💊 Medicines</a>
+    <a class="nav-btn" routerLink="/sales"     routerLinkActive="active" (click)="closeMenu()">🛒 New Sale</a>
+    <a class="nav-btn" routerLink="/records"   routerLinkActive="active" (click)="closeMenu()">🧾 Records</a>
+    <a class="nav-btn" routerLink="/staff"     routerLinkActive="active" (click)="closeMenu()">👥 Staff</a>
+  </div>
+</header>
+
+<div class="modal-overlay" [class.open]="staffPickerOpen" (click)="closeStaffPicker()">
+  <div class="modal" style="max-width:420px" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3 class="modal-title">Who's on shift?</h3>
+      <button class="modal-close" (click)="closeStaffPicker()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="picker-hint">Select the staff member currently at the counter.</p>
+      <div class="staff-switch-list">
+        <div
+          class="staff-switch-item"
+          *ngFor="let s of staffService.staffList"
+          [class.active]="s.id === currentStaff.id"
+          (click)="switchStaff(s.id)"
+        >
+          <span class="staff-avatar-sm" [style.background]="s.color">{{ s.initials }}</span>
+          <div class="switch-info">
+            <div class="switch-name">{{ s.name }}</div>
+            <div class="switch-role">{{ s.role }}</div>
+          </div>
+          <span class="on-shift-badge" *ngIf="s.id === currentStaff.id">✓ On Shift</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

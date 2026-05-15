@@ -1,0 +1,70 @@
+<div class="section-header">
+  <div>
+    <h2 class="section-title">Record a Sale</h2>
+    <p class="section-sub">Select the medicine, enter quantity and customer name, then confirm.</p>
+  </div>
+</div>
+
+<div class="form-card">
+  <div class="form-grid">
+
+    <div class="form-group">
+      <label class="form-label">Medicine *</label>
+      <select class="form-control" [(ngModel)]="selectedMedicineId">
+        <option value="">— Select a medicine —</option>
+        <option *ngFor="let m of medicines" [value]="m.id">
+          {{ m.fullName }} ({{ m.brand }}) — ₹{{ m.price | number:'1.2-2' }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Customer Name</label>
+      <input type="text" class="form-control" [(ngModel)]="customerName"
+        placeholder="e.g. Ramesh Nair (optional)" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Quantity Sold *</label>
+      <input type="number" class="form-control" [(ngModel)]="quantity"
+        min="1" placeholder="Number of units" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Price per Unit (₹)</label>
+      <input type="text" class="form-control" readonly
+        [value]="selectedMedicine ? ('₹ ' + (selectedMedicine.price | number:'1.2-2')) : '—'" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Processed By</label>
+      <input type="text" class="form-control" readonly [value]="staffName" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Total Bill Amount</label>
+      <div class="total-display">₹ {{ totalAmount | number:'1.2-2' }}</div>
+    </div>
+
+  </div>
+
+  <!-- Stock info tip -->
+  <div class="stock-info" *ngIf="selectedMedicine">
+    <span class="badge" [class.badge-green]="selectedMedicine.quantity >= 10"
+                        [class.badge-yellow]="selectedMedicine.quantity < 10">
+      {{ selectedMedicine.quantity }} units in stock
+    </span>
+    <span *ngIf="selectedMedicine.quantity < 10" style="font-size:.82rem;color:var(--warning);margin-left:.5rem">
+      ⚠ Low stock — please reorder soon
+    </span>
+  </div>
+
+  <div class="form-actions">
+    <button class="btn btn-success" (click)="submitSale()" [disabled]="loading">
+      {{ loading ? 'Processing…' : '✓ Confirm Sale' }}
+    </button>
+  </div>
+
+  <div class="form-msg success" *ngIf="successMsg">{{ successMsg }}</div>
+  <div class="form-msg error"   *ngIf="errorMsg">{{ errorMsg }}</div>
+</div>

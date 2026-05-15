@@ -1,0 +1,181 @@
+<!-- Stats row -->
+<div class="stats-bar">
+  <div class="stat-card">
+    <span class="stat-num">{{ statTotal }}</span>
+    <span class="stat-lbl">Total Medicines</span>
+  </div>
+  <div class="stat-card warning">
+    <span class="stat-num">{{ statExpiring }}</span>
+    <span class="stat-lbl">⏰ Expiring Soon</span>
+  </div>
+  <div class="stat-card danger">
+    <span class="stat-num">{{ statLowStock }}</span>
+    <span class="stat-lbl">📦 Low Stock</span>
+  </div>
+</div>
+
+<!-- Toolbar -->
+<div class="toolbar">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input
+      type="text"
+      class="search-input"
+      [(ngModel)]="searchQuery"
+      (ngModelChange)="applyFilter()"
+      placeholder="Search by name… e.g. Crocin, Omez, Allegra"
+    />
+    <button class="clear-btn" *ngIf="searchQuery" (click)="clearSearch()">✕</button>
+  </div>
+  <button class="btn btn-primary" (click)="openAddModal()">+ Add Medicine</button>
+</div>
+
+<!-- Colour legend -->
+<div class="legend">
+  <span class="legend-dot red"></span><span>Red — expiry within 30 days</span>
+  <span class="legend-dot yellow"></span><span>Yellow — stock below 10 units</span>
+</div>
+
+<!-- Medicines table -->
+<div class="table-wrap">
+  <table class="table">
+    <thead>
+      <tr>
+        <th (click)="sortBy('fullName')">Medicine Name <span class="sort-icon">↕</span></th>
+        <th (click)="sortBy('brand')">Brand <span class="sort-icon">↕</span></th>
+        <th (click)="sortBy('expiryDate')">Expiry <span class="sort-icon">↕</span></th>
+        <th (click)="sortBy('quantity')">Stock <span class="sort-icon">↕</span></th>
+        <th (click)="sortBy('price')">Price (₹) <span class="sort-icon">↕</span></th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Empty state -->
+      <tr *ngIf="filteredMedicines.length === 0">
+        <td colspan="6">
+          <div class="empty-state">
+            <div class="empty-icon">💊</div>
+            <p>No medicines found. Try a different search, or add a new medicine.</p>
+          </div>
+        </td>
+      </tr>
+
+      <!-- Medicine rows -->
+      <tr *ngFor="let m of filteredMedicines" [class]="getRowClass(m)">
+        <td><strong>{{ m.fullName }}</strong></td>
+        <td>{{ m.brand }}</td>
+        <td>
+          {{ m.expiryDate | date:'dd MMM yyyy' }}
+          <span *ngIf="daysUntilExpiry(m.expiryDate) <= 0"   class="badge badge-red">Expired!</span>
+          <span *ngIf="daysUntilExpiry(m.expiryDate) > 0 && daysUntilExpiry(m.expiryDate) <= 7"  class="badge badge-red">⚠ {{ daysUntilExpiry(m.expiryDate) }}d left</span>
+          <span *ngIf="daysUntilExpiry(m.expiryDate) > 7 && daysUntilExpiry(m.expiryDate) <= 30" class="badge badge-yellow">{{ daysUntilExpiry(m.expiryDate) }}d left</span>
+        </td>
+        <td>
+          <span class="badge" [class.badge-yellow]="m.quantity < 10" [class.badge-green]="m.quantity >= 10">
+            {{ m.quantity }} units
+          </span>
+        </td>
+        <td>₹ {{ m.price | number:'1.2-2' }}</td>
+        <td>
+          <div class="action-btns">
+            <button class="btn btn-sm btn-success" (click)="openSellModal(m)">🛒 Sell</button>
+            <button class="btn btn-sm btn-outline" (click)="openEditModal(m)">✏ Edit</button>
+            <button class="btn btn-sm btn-danger"  (click)="deleteMedicine(m)">🗑</button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══ ADD / EDIT MEDICINE MODAL ═══════════════════════════════ -->
+<div class="modal-overlay" [class.open]="showModal" (click)="closeModal()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3 class="modal-title">{{ editingId ? 'Edit Medicine' : 'Add New Medicine' }}</h3>
+      <button class="modal-close" (click)="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="medicineForm" class="form-grid">
+        <div class="form-group full">
+          <label class="form-label">Full Medicine Name *</label>
+          <input type="text" class="form-control" formControlName="fullName"
+            placeholder="e.g. Crocin Advance 500mg Tablet" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Brand / Manufacturer *</label>
+          <input type="text" class="form-control" formControlName="brand"
+            placeholder="e.g. GSK, Cipla, Sun Pharma" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Expiry Date *</label>
+          <input type="date" class="form-control" formControlName="expiryDate" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Quantity in Stock *</label>
+          <input type="number" class="form-control" formControlName="quantity"
+            placeholder="Units on shelf" min="0" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Price per Unit (₹) *</label>
+          <input type="number" class="form-control" formControlName="price"
+            placeholder="e.g. 45.00" step="0.01" min="0.01" />
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Notes / Storage Instructions</label>
+          <textarea class="form-control" formControlName="notes" rows="3"
+            placeholder="e.g. Store below 25°C · Take after food · Not for children under 12"></textarea>
+        </div>
+      </form>
+      <div class="form-msg error" *ngIf="modalError">{{ modalError }}</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" (click)="closeModal()">Cancel</button>
+      <button class="btn btn-primary" (click)="saveMedicine()" [disabled]="modalLoading">
+        {{ modalLoading ? 'Saving…' : 'Save Medicine' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ QUICK SELL MODAL ═════════════════════════════════════════ -->
+<div class="modal-overlay" [class.open]="showSellModal" (click)="closeSellModal()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3 class="modal-title">Quick Sale</h3>
+      <button class="modal-close" (click)="closeSellModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="quick-sell-info" *ngIf="sellMedicine">
+        <div class="quick-sell-avatar">💊</div>
+        <div>
+          <p class="quick-sell-name">{{ sellMedicine.fullName }}</p>
+          <p class="quick-sell-brand">{{ sellMedicine.brand }} · ₹ {{ sellMedicine.price | number:'1.2-2' }} per unit</p>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Quantity *</label>
+          <input type="number" class="form-control" [(ngModel)]="sellQty"
+            min="1" placeholder="Units to sell" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Customer Name</label>
+          <input type="text" class="form-control" [(ngModel)]="sellCustomer"
+            placeholder="e.g. Sunita Joshi (optional)" />
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Total Bill</label>
+          <div class="total-display">₹ {{ quickTotal | number:'1.2-2' }}</div>
+        </div>
+      </div>
+      <div class="form-msg error" *ngIf="sellError">{{ sellError }}</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" (click)="closeSellModal()">Cancel</button>
+      <button class="btn btn-success" (click)="confirmSale()" [disabled]="sellLoading">
+        {{ sellLoading ? 'Processing…' : '✓ Confirm Sale' }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<div class="section-header">
+  <div>
+    <h2 class="section-title">Our Team</h2>
+    <p class="section-sub">The people who keep ABC Pharmacy running. Click a card to start a shift.</p>
+  </div>
+</div>
+
+<div class="staff-grid">
+  <div
+    class="staff-card"
+    *ngFor="let s of staffService.staffList"
+    [class.on-shift]="s.id === currentStaff.id"
+    (click)="switchTo(s)"
+    [title]="'Click to start shift as ' + s.name"
+  >
+    <div class="staff-avatar-lg" [style.background]="s.color">{{ s.initials }}</div>
+    <div class="staff-name">{{ s.name }}</div>
+    <span class="staff-role-tag">{{ s.role }}</span>
+    <div class="staff-phone">📞 {{ s.phone }}</div>
+    <div class="staff-since">With ABC Pharmacy since {{ s.since }}</div>
+    <span class="on-shift-badge" *ngIf="s.id === currentStaff.id">✓ Currently On Shift</span>
+    <span class="click-hint"    *ngIf="s.id !== currentStaff.id">Click to start shift</span>
+  </div>
+</div>
